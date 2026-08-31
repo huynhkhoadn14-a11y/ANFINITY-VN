@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANFINITY VN | Futuristic Financial Intelligence</title>
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #020617;
+            --glass-bg: rgba(15, 23, 42, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --glow-color: rgba(99, 102, 241, 0.3);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Background Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+            animation: float 20s infinite alternate;
+        }
+        .orb-1 { width: 400px; height: 400px; background: #4f46e5; top: -100px; left: -100px; }
+        .orb-2 { width: 500px; height: 500px; background: #7c3aed; bottom: -150px; right: -100px; animation-delay: -5s; }
+        .orb-3 { width: 300px; height: 300px; background: #db2777; top: 40%; left: 30%; animation-delay: -10s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 100px) scale(1.1); }
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(168, 85, 247, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px -10px var(--glow-color);
+        }
+
+        .luxury-text-gradient {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 10px rgba(168, 85, 247, 0.3));
+        }
+
+        .btn-futuristic {
+            background: var(--accent-gradient);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-futuristic:hover {
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+            transform: scale(1.02);
+        }
+
+        .input-luxury {
+            background: rgba(0, 0, 0, 0.2) !important;
+            border: 1px solid var(--glass-border) !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .input-luxury:focus {
+            border-color: #a855f7 !important;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2) !important;
+            background: rgba(0, 0, 0, 0.4) !important;
+        }
+
+        .bento-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 2rem; 
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(168, 85, 247, 0.5); }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+    <!-- Background Elements -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div id="app-content" class="max-w-7xl mx-auto animate-fade-in">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+            <div>
+                <div class="flex items-center gap-4 mb-3">
+                    <div class="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg shadow-indigo-500/40">
+                        <i data-lucide="vault" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h1 class="text-5xl font-extrabold luxury-text-gradient tracking-tighter">
+                        ANFINITY VN
+                    </h1>
+                </div>
+                <p class="text-slate-400 font-light text-sm tracking-[0.2em] uppercase opacity-70">
+                    Enterprise Financial Intelligence <span class="mx-2 text-indigo-500">•</span> Secure Vault v2.0
+                </p>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="AppController.exportData()" class="glass-card px-6 py-3 rounded-full text-xs font-bold flex items-center gap-2 hover:text-indigo-400 transition-all">
+                    <i data-lucide="download" class="w-4 h-4"></i> EXPORT DATA
+                </button>
+                <button onclick="location.reload()" class="glass-card px-6 py-3 rounded-full text-xs font-bold flex items-center gap-2 text-rose-400 hover:bg-rose-500/10 transition-all">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> REFRESH
+                </button>
+            </div>
+        </header>
+
+        <!-- Bento Grid -->
+        <div class="bento-grid">
+            <!-- Summary Section -->
+            <div class="col-span-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-4">
+                <div class="glass-card p-8 rounded-[32px] relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">
+                        <i data-lucide="wallet" class="w-24 h-24"></i>
+                    </div>
+                    <p class="text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em] mb-4">Net Balance</p>
+                    <h2 id="balance" class="text-5xl font-extrabold tracking-tighter mb-4">0 ₫</h2>
+                    <div class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-bold border border-indigo-500/30">
+                        <i data-lucide="trending-up" class="w-3 h-3"></i> +2.5% GROWTH
+                    </div>
+                </div>
+                <div class="glass-card p-8 rounded-[32px] border-l-4 border-l-emerald-500">
+                    <p class="text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em] mb-4">Total Income</p>
+                    <h2 id="income" class="text-5xl font-extrabold tracking-tighter text-emerald-400">0 ₫</h2>
+                </div>
+                <div class="glass-card p-8 rounded-[32px] border-l-4 border-l-rose-500">
+                    <p class="text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em] mb-4">Total Expenses</p>
+                    <h2 id="expense" class="text-5xl font-extrabold tracking-tighter text-rose-400">0 ₫</h2>
+                </div>
+            </div>
+
+            <!-- Entry Form -->
+            <div class="col-span-full lg:col-span-1 glass-card p-8 rounded-[32px]">
+                <h3 class="text-xl font-bold mb-8 flex items-center gap-3">
+                    <i data-lucide="plus-circle" class="text-indigo-400 w-5 h-5"></i> New Transaction
+                </h3>
+                <form id="tx-form" class="space-y-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Description</label>
+                        <input type="text" id="tx-text" required class="input-luxury w-full p-4 rounded-2xl text-sm" placeholder="e.g. Strategic Investment...">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Amount</label>
+                            <input type="number" id="tx-amount" required class="input-luxury w-full p-4 rounded-2xl text-sm" placeholder="0">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Type</label>
+                            <select id="tx-type" class="input-luxury w-full p-4 rounded-2xl text-sm appearance-none">
+                                <option value="expense">Expense</option>
+                                <option value="income">Income</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Category</label>
+                        <select id="tx-category" class="input-luxury w-full p-4 rounded-2xl text-sm appearance-none">
+                            <option value="Food">🍕 Food & Dining</option>
+                            <option value="Transport">🚗 Transport</option>
+                            <option value="Shopping">🛍️ Shopping</option>
+                            <option value="Entertainment">🎮 Entertainment</option>
+                            <option value="Health">🏥 Health</option>
+                            <option value="Work">💼 Work/Salary</option>
+                            <option value="Other">✨ Other</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-futuristic w-full py-4 rounded-2xl font-bold text-sm tracking-widest text-white uppercase shadow-xl">
+                        Confirm Transaction
+                    </button>
+                </form>
+            </div>
+
+            <!-- Ledger -->
+            <div class="col-span-full lg:col-span-2 glass-card p-8 rounded-[32px]">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-xl font-bold flex items-center gap-3">
+                        <i data-lucide="list" class="text-indigo-400 w-5 h-5"></i> Transaction Ledger
+                    </h3>
+                    <span class="text-[9px] font-bold bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full text-indigo-400 uppercase tracking-widest">AES-256 Encrypted</span>
+                </div>
+                <div id="tx-list" class="space-y-4 max-h-[500px] overflow-y-auto pr-3"></div>
+            </div>
+
+            <!-- Budget -->
+            <div class="col-span-full lg:col-span-1 glass-card p-8 rounded-[32px]">
+                <h3 class="text-xl font-bold mb-8 flex items-center gap-3">
+                    <i data-lucide="target" class="text-indigo-400 w-5 h-5"></i> Budget Control
+                </h3>
+                <div class="space-y-8">
+                    <div>
+                        <div class="flex justify-between mb-3">
+                            <span class="text-xs font-medium text-slate-400">Monthly Consumption</span>
+                            <span id="budget-percent" class="text-xs font-bold text-indigo-400">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-800/50 h-2 rounded-full overflow-hidden border border-white/5">
+                            <div id="budget-progress" class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-1000 ease-out" style="width: 0%"></div>
+                        </div>
+                        <p id="budget-status" class="text-[11px] mt-4 text-slate-500 text-center font-medium tracking-wide"></p>
+                    </div>
+                    <div class="pt-6 border-t border-slate-800/50">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase block mb-3 tracking-widest">Set Capital Limit</label>
+                        <div class="flex gap-2">
+                            <input type="number" id="budget-input" class="input-luxury flex-1 p-3 rounded-xl text-sm" placeholder="5,000,000">
+                            <button onclick="AppController.updateBudget()" class="p-3 bg-indigo-600 rounded-xl hover:bg-indigo-500 transition-all active:scale-90 shadow-lg shadow-indigo-500/30">
+                                <i data-lucide="check" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics -->
+            <div class="col-span-full lg:col-span-3 glass-card p-8 rounded-[32px]">
+                <h3 class="text-xl font-bold mb-8 flex items-center gap-3">
+                    <i data-lucide="line-chart" class="text-indigo-400 w-5 h-5"></i> Asset Growth Analytics
+                </h3>
+                <div class="h-[300px]">
+                    <canvas id="mainChart"></canvas>
+                </div>
+            </div>
+
+            <!-- AI Insight -->
+            <div class="col-span-full lg:col-span-1 glass-card p-8 rounded-[32px] bg-gradient-to-br from-indigo-600/10 to-purple-600/10 border-indigo-500/30">
+                <h3 class="text-xl font-bold mb-6 flex items-center gap-3">
+                    <i data-lucide="sparkles" class="text-yellow-400 w-5 h-5"></i> AI Insights
+                </h3>
+                <div class="relative">
+                    <i data-lucide="quote" class="absolute -top-2 -left-2 w-8 h-8 text-indigo-500/20"></i>
+                    <p id="finance-tip" class="text-slate-300 text-sm leading-relaxed italic relative z-10 font-light"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="toast" class="toast-notification glass-card px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 text-white border-l-4 border-indigo-500 transition-all duration-500 fixed bottom-8 right-8 z-[2000] translate-x-[150%]">
+        <i data-lucide="info" class="w-5 h-5 text-indigo-400"></i>
+        <span id="toast-msg" class="text-sm font-medium">Notification message</span>
+    </div>
+
+    <script>
+        /**
+         * SECURITY CORE
+         */
+        const SecurityCore = {
+            _getKey() { return CryptoJS.SHA256('anfinity-vn-secure-vault-2024').toString(); },
+            encrypt(data) {
+                try { return CryptoJS.AES.encrypt(JSON.stringify(data), this._getKey()).toString(); } 
+                catch (e) { return null; }
+            },
+            decrypt(ciphertext) {
+                try {
+                    const bytes = CryptoJS.AES.decrypt(ciphertext, this._getKey());
+                    return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+                } catch (e) { return null; }
+            }
+        };
+
+        /**
+         * DATA LAYER
+         */
+        const DataStore = {
+            state: { transactions: [], budget: 0 },
+            init() {
+                try {
+                    const txEnc = localStorage.getItem('anfinity_tx_enc');
+                    const bgEnc = localStorage.getItem('anfinity_bg_enc');
+                    this.state.transactions = txEnc ? SecurityCore.decrypt(txEnc) : [];
+                    this.state.budget = bgEnc ? SecurityCore.decrypt(bgEnc) : 0;
+                    if (!this.state.transactions) this.state.transactions = [];
+                } catch (e) { UIEngine.showToast("Secure Data Load Error", "error"); }
+            },
+            save() {
+                localStorage.setItem('anfinity_tx_enc', SecurityCore.encrypt(this.state.transactions));
+                localStorage.setItem('anfinity_bg_enc', SecurityCore.encrypt(this.state.budget));
+            },
+            addTransaction(tx) { this.state.transactions.push(tx); this.save(); },
+            deleteTransaction(id) { 
+                this.state.transactions = this.state.transactions.filter(t => t.id !== id); 
+                this.save(); 
+            }
+        };
+
+        /**
+         * UI ENGINE
+         */
+        const UIEngine = {
+            chart: null,
+            showToast(msg, type = 'info') {
+                const toast = document.getElementById('toast');
+                document.getElementById('toast-msg').innerText = msg;
+                toast.className = `toast-notification glass-card px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 text-white border-l-4 ${type === 'error' ? 'border-rose-500' : 'border-indigo-500'} fixed bottom-8 right-8 z-[2000] translate-x-0`;
+                setTimeout(() => toast.classList.add('translate-x-[150%]'), 3000);
+            },
+            formatCurrency(amt) {
+                return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amt);
+            },
+            calculateStats() {
+                return DataStore.state.transactions.reduce((acc, t) => {
+                    acc.total += t.amount;
+                    if (t.amount > 0) acc.income += t.amount;
+                    else acc.expense += Math.abs(t.amount);
+                    return acc;
+                }, { total: 0, income: 0, expense: 0 });
+            },
+            updateDashboard() {
+                const stats = this.calculateStats();
+                document.getElementById('balance').textContent = this.formatCurrency(stats.total);
+                document.getElementById('income').textContent = this.formatCurrency(stats.income);
+                document.getElementById('expense').textContent = this.formatCurrency(stats.expense);
+                this.renderList();
+                this.renderChart();
+                this.updateBudgetUI();
+                lucide.createIcons();
+            },
+            renderList() {
+                const listContainer = document.getElementById('tx-list');
+                const fragment = document.createDocumentFragment();
+                listContainer.innerHTML = '';
+                [...DataStore.state.transactions].reverse().forEach((t, index) => {
+                    const item = document.createElement('div');
+                    item.className = `flex justify-between items-center p-5 rounded-2xl transition-all duration-300 animate-fade-in ${t.type === 'income' ? 'bg-emerald-500/5 border border-emerald-500/10' : 'bg-slate-800/30 border border-white/5'} hover:bg-slate-800/60 group`;
+                    item.style.animationDelay = `${index * 0.05}s`;
+                    item.innerHTML = `
+                        <div class="flex items-center gap-5">
+                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center bg-slate-700/50 text-xl group-hover:scale-110 transition-transform">
+                                ${this.getCategoryIcon(t.category)}
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm tracking-tight description-text"></p>
+                                <p class="text-[10px] font-medium text-slate-500 uppercase tracking-wider">${new Date(t.date).toLocaleDateString('vi-VN')} • ${t.category}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6">
+                            <span class="font-bold text-sm ${t.type === 'income' ? 'text-emerald-400' : 'text-rose-400'}">
+                                ${t.type === 'income' ? '+' : ''}${this.formatCurrency(t.amount)}
+                            </span>
+                            <button onclick="AppController.deleteTx(${t.id})" class="text-slate-600 hover:text-rose-500 transition-colors opacity-0 group-hover:opacity-100">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>`;
+                    item.querySelector('.description-text').textContent = t.text;
+                    fragment.appendChild(item);
+                });
+                listContainer.appendChild(fragment);
+            },
+            getCategoryIcon(cat) {
+                const icons = { 'Food': '🍕', 'Transport': '🚗', 'Shopping': '🛍️', 'Entertainment': '🎮', 'Health': '🏥', 'Work': '💼', 'Other': '✨' };
+                return icons[cat] || '💰';
+            },
+            updateBudgetUI() {
+                const expenses = DataStore.state.transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + Math.abs(t.amount), 0);
+                const limit = DataStore.state.budget;
+                const percent = limit > 0 ? Math.min((expenses / limit) * 100, 100) : 0;
+                const progressEl = document.getElementById('budget-progress');
+                const percentEl = document.getElementById('budget-percent');
+                const statusEl = document.getElementById('budget-status');
+                progressEl.style.width = `${percent}%`;
+                percentEl.innerText = `${Math.round(percent)}%`;
+                if(percent > 90) {
+                    statusEl.innerText = "🚨 Critical: Limit almost reached";
+                    statusEl.className = "text-[11px] mt-4 text-rose-400 text-center font-bold uppercase tracking-widest";
+                    progressEl.className = "h-full bg-rose-500 transition-all duration-1000";
+                } else if (percent > 70) {
+                    statusEl.innerText = "⚠️ Warning: High consumption";
+                    statusEl.className = "text-[11px] mt-4 text-yellow-400 text-center font-medium uppercase tracking-widest";
+                    progressEl.className = "h-full bg-yellow-500 transition-all duration-1000";
+                } else {
+                    statusEl.innerText = "✅ Asset status: Healthy";
+                    statusEl.className = "text-[11px] mt-4 text-emerald-400 text-center font-medium uppercase tracking-widest";
+                    progressEl.className = "h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-1000";
+                }
+            },
+            renderChart() {
+                const ctx = document.getElementById('mainChart').getContext('2d');
+                const dailyData = {};
+                DataStore.state.transactions.forEach(t => {
+                    const date = new Date(t.date).toLocaleDateString();
+                    dailyData[date] = (dailyData[date] || 0) + t.amount;
+                });
+                const labels = Object.keys(dailyData);
+                let cumulative = 0;
+                const balances = labels.map(l => { cumulative += dailyData[l]; return cumulative; });
+                if(this.chart) this.chart.destroy();
+                this.chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels,
+                        datasets: [{
+                            label: 'Asset Value',
+                            data: balances,
+                            borderColor: '#a855f7',
+                            backgroundColor: 'rgba(168, 85, 247, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 4,
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            pointHoverBackgroundColor: '#a855f7'
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#64748b', font: { family: 'Plus Jakarta Sans' } } },
+                            x: { grid: { display: false }, ticks: { color: '#64748b', font: { family: 'Plus Jakarta Sans' } } }
+                        }
+                    }
+                });
+            }
+        };
+
+        /**
+         * APP CONTROLLER
+         */
+        const AppController = {
+            init() {
+                DataStore.init();
+                UIEngine.updateDashboard();
+                this.setupEventListeners();
+                this.setRandomTip();
+            },
+            setupEventListeners() {
+                document.getElementById('tx-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleCreateTransaction();
+                });
+            },
+            handleCreateTransaction() {
+                try {
+                    const text = document.getElementById('tx-text').value.trim();
+                    const amount = parseFloat(document.getElementById('tx-amount').value);
+                    const type = document.getElementById('tx-type').value;
+                    const category = document.getElementById('tx-category').value;
+                    if (!text || isNaN(amount) || amount <= 0) throw new Error("Thông tin nhập vào không hợp lệ.");
+                    const tx = {
+                        id: Date.now(),
+                        text: text,
+                        amount: type === 'expense' ? -Math.abs(amount) : Math.abs(amount),
+                        type: type,
+                        category: category,
+                        date: new Date().toISOString()
+                    };
+                    DataStore.addTransaction(tx);
+                    UIEngine.updateDashboard();
+                    UIEngine.showToast("Giao dịch đã được ghi nhận bảo mật");
+                    document.getElementById('tx-form').reset();
+                } catch (err) { UIEngine.showToast(err.message, "error"); }
+            },
+            deleteTx(id) {
+                DataStore.deleteTransaction(id);
+                UIEngine.updateDashboard();
+                UIEngine.showToast("Đã xóa mục khỏi sổ cái");
+            },
+            updateBudget() {
+                const val = parseFloat(document.getElementById('budget-input').value);
+                if (isNaN(val) || val <= 0) {
+                    UIEngine.showToast("Vui lòng nhập hạn mức hợp lệ", "error");
+                    return;
+                }
+                DataStore.state.budget = val;
+                DataStore.save();
+                UIEngine.updateDashboard();
+                UIEngine.showToast("Cập nhật hạn mức thành công");
+            },
+            exportData() {
+                try {
+                    let csv = "Date,Description,Category,Amount,Type\n";
+                    DataStore.state.transactions.forEach(t => {
+                        csv += `${new Date(t.date).toLocaleDateString()},"${t.text}",${t.category},${t.amount},${t.type}\n`;
+                    });
+                    const blob = new Blob([csv], { type: 'text/csv' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.setAttribute('href', url);
+                    a.setAttribute('download', `ANFINITY_VN_Report_${Date.now()}.csv`);
+                    a.click();
+                    UIEngine.showToast("Xuất báo cáo tài chính thành công");
+                } catch (e) { UIEngine.showToast("Export failed", "error"); }
+            },
+            setRandomTip() {
+                const tips = [
+                    "Quy tắc 50/30/20: 50% Thiết yếu, 30% Sở thích, 20% Tiết kiệm.",
+                    "Đa dạng hóa tài sản để giảm thiểu rủi ro và tối đa hóa tăng trưởng.",
+                    "Hãy trả cho bản thân trước: Chuyển vào tiết kiệm ngay khi nhận lương.",
+                    "Tránh bẫy lạm phát lối sống khi thu nhập của bạn tăng lên."
+                ];
+                document.getElementById('finance-tip').innerText = `"${tips[Math.floor(Math.random()*tips.length)]}"`;
+            }
+        };
+
+        window.onload = () => AppController.init();
+    </script>
+</body>
+</html>
